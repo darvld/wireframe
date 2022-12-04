@@ -1,0 +1,9 @@
+# IDE
+.fleet/
+.idea/
+.vscode/
+.editorconfig
+
+# Gradle builds
+.gradle
+build
