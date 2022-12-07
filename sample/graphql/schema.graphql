@@ -1,0 +1,18 @@
+type Query {
+    artist(id: ID!): Artist
+}
+
+type Mutation {
+    createArtist(artist: ArtistInput!): Artist
+}
+
+type Artist {
+    id: ID!
+    name: String!
+    bio: String
+}
+
+input ArtistInput {
+    name: String!
+    bio: String
+}
