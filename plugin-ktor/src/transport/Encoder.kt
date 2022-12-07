@@ -7,7 +7,6 @@ internal fun encodeResponse(result: ExecutionResult): JsonElement {
     return buildJsonObject {
         if (result.errors != null && result.errors.isNotEmpty()) {
             val encodedErrors = result.errors.map { encodeMap(it.toSpecification()) }
-
             put("errors", JsonArray(encodedErrors))
         }
 
