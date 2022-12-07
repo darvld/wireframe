@@ -1,7 +1,7 @@
 # Project sample
 
 This project showcases how to use the code generator and the Ktor runtime plugin to create a GraphQL application with
-Artemis.
+Wireframe.
 
 ## Structure
 

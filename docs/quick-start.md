@@ -9,14 +9,14 @@ Apply the gradle plugin on your project's build script:
 
 ```kotlin
 // build.gradle.kts
-id("io.github.darvld.artemis") version "0.5.0"
+id("io.github.darvld.wireframe") version "0.5.0"
 ```
 
 Add a runtime dependency:
 
 ```kotlin
 // build.gradle.kts
-implementation("io.github.darvld.artemis:plugin-ktor:0.5.0")
+implementation("io.github.darvld.wireframe:plugin-ktor:0.5.0")
 ```
 
 ## Usage

@@ -1,4 +1,6 @@
-# Artemis
+# Wireframe
+
+[![Maven Central](https://img.shields.io/maven-central/v/io.github.darvld.wireframe/runtime.svg?label=Maven%20Central)](https://search.maven.org/search?q=g:%22io.github.darvld.wireframe%22%20AND%20a:%22runtime%22)
 
 A GraphQL server library for Kotlin.
 
@@ -20,5 +22,6 @@ The following table shows the current state of features for the Ktor runtime:
 | Custom type mappings                  | Not implemented 🚧 |
 
 ## More information
+
 - [Quick start](docs/quick-start.md)
 - [Sample project](sample/README.md)

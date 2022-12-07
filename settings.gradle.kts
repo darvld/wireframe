@@ -3,7 +3,7 @@
 import org.gradle.api.initialization.resolve.RepositoriesMode.FAIL_ON_PROJECT_REPOS
 
 // Basic configuration
-rootProject.name = "artemis"
+rootProject.name = "wireframe"
 include(":processor", ":runtime", ":plugin-gradle", ":plugin-ktor", ":sample")
 
 enableFeaturePreview("TYPESAFE_PROJECT_ACCESSORS")
