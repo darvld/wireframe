@@ -48,10 +48,11 @@ private fun Resolvers.artistFields() = artist {
     bio { artist ->
         // Here we can retrieve the context value set in parent fields
         val origin = context.get<String>("origin")
+        val role = context.get<String>("role")
 
         // Fields in non-route types (i.e. types other than Query,
         // Mutation, or Subscription) may access the value resolved for
         // their parent field as the first resolver argument
-        "${artist.name} doesn't have a bio. (data resolved from $origin)"
+        "[$role] ${artist.name} doesn't have a bio. (data resolved from $origin)"
     }
 }
