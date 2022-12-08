@@ -65,7 +65,7 @@ public class ResolversPlugin : WireframeCompilerPlugin {
 
                 // Create resolver lambda signature
                 val lambdaType = LambdaTypeName.get(
-                    RESOLVER_SCOPE,
+                    receiver = RESOLVER_SCOPE,
                     returnType = environment.typeNameFor(field.type),
                     parameters = buildList {
                         // Fields in custom types (i.e. not Query, Mutation, or Subscription)
@@ -80,7 +80,7 @@ public class ResolversPlugin : WireframeCompilerPlugin {
 
                         // Add field arguments to the lambda
                         field.arguments.forEach { add(ParameterSpec(it.name, environment.typeNameFor(it.type))) }
-                    })
+                    }).copy(suspending = true)
 
                 addParameter(RESOLVER_LAMBDA_PARAM_NAME, lambdaType)
 

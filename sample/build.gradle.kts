@@ -4,7 +4,7 @@ import java.util.*
 
 plugins {
     kotlin("jvm")
-    id("io.github.darvld.wireframe") version "0.5.0"
+    id("io.github.darvld.wireframe") version "0.5.2"
 
     application
 }
