@@ -20,14 +20,9 @@ pluginManagement {
     val kotlinVersion: String by settings
     val nexusPluginVersion: String by settings
 
-    // Published plugin version, used by sample project
-    val version: String by settings
-
     plugins {
         kotlin("jvm").version(kotlinVersion)
-
         id("io.github.gradle-nexus.publish-plugin").version(nexusPluginVersion)
-        id("io.github.darvld.wireframe").version(version)
     }
 }
 

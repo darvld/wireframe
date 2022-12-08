@@ -47,9 +47,9 @@ class WireframePlugin : Plugin<Project> {
                 task.group = TaskGroup
                 task.description = "Generate kotlin sources for GraphQL definitions."
 
-                task.projectName.set(wiring.projectName.orElse(project.name))
                 task.packageName.set(wiring.packageName.orElse(project.group.toString()))
-
+                task.useFilenamePackage.set(wiring.useFilenamePackage.orElse(true))
+                
                 task.pluginJars.setFrom(configuration)
 
                 val sources = wiring.sourcesRoot.orNull

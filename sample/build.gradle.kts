@@ -4,15 +4,10 @@ import java.util.*
 
 plugins {
     kotlin("jvm")
-    id("io.github.darvld.wireframe")
+    id("io.github.darvld.wireframe") version "0.5.0"
 
     application
 }
-
-wiring {
-    projectName.set("WireframeSample")
-}
-
 
 java {
     sourceCompatibility = JavaVersion.VERSION_11

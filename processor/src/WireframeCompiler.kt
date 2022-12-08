@@ -43,13 +43,12 @@ public class WireframeCompiler {
     )
 
     public fun process(
-        project: String,
         basePackage: String,
         sources: Iterable<Source>,
         plugins: Iterable<WireframeCompilerPlugin> = emptyList(),
     ): Sequence<Output> {
         val parser = SchemaParser()
-        val environment = ProcessingEnvironment(project, basePackage)
+        val environment = ProcessingEnvironment(basePackage)
         val allPlugins = listOf(BasePlugin(), ResolversPlugin()) + plugins
 
         // Parse all sources and merge declarations into a single registry

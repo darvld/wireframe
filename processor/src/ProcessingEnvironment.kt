@@ -10,7 +10,6 @@ import io.github.darvld.wireframe.extensions.generateNameFor
 
 /**Provides information about the environment in which the code will be generated.*/
 public class ProcessingEnvironment internal constructor(
-    public val projectName: String,
     public val basePackage: String,
 ) {
     @JvmInline

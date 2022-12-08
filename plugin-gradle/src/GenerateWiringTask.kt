@@ -27,10 +27,10 @@ abstract class GenerateWiringTask : DefaultTask() {
     abstract val outputDir: DirectoryProperty
 
     @get:Input
-    abstract val projectName: Property<String>
+    abstract val packageName: Property<String>
 
     @get:Input
-    abstract val packageName: Property<String>
+    abstract val useFilenamePackage: Property<Boolean>
 
     @get:InputFiles
     abstract val pluginJars: ConfigurableFileCollection
@@ -51,12 +51,19 @@ abstract class GenerateWiringTask : DefaultTask() {
         val plugins = ServiceLoader.load(WireframeCompilerPlugin::class.java, pluginLoader)
 
         val basePackage = packageName.get()
+        val appendFilename = useFilenamePackage.get()
         val rootPath = sourcesRoot.get().asFile.toPath()
 
         val sources = sourcesRoot.asFileTree.filter { extensionRegex.matches(it.extension) }.map {
             val sourcePackageName = rootPath.relativize(it.toPath()).pathString
-                .substringBeforeLast(".")
-                .replace(Regex("""[/\\]"""), ".")
+                // Use standard path separators
+                .replace(Regex("""[/\\]"""), "/")
+                // Remove extension
+                // If requested, don't include the filename as package
+                .substringBeforeLast(if (appendFilename) "." else "/")
+                // Replace path separators with package separators
+                .replace("/", ".")
+                // Remove base package prefix
                 .removePrefix(basePackage)
 
             WireframeCompiler.Source(
@@ -70,7 +77,6 @@ abstract class GenerateWiringTask : DefaultTask() {
         val outputPath = outputDir.asFile.get().toPath()
 
         generator.process(
-            project = projectName.get(),
             basePackage = basePackage,
             sources,
             plugins
