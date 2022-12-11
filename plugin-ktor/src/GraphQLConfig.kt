@@ -1,16 +1,12 @@
 package io.github.darvld.wireframe.ktor
 
-import graphql.GraphQLContext
 import io.github.darvld.wireframe.routing.Resolvers
-import io.ktor.server.application.*
-import io.ktor.util.pipeline.*
 
 public typealias ResolverRouting = Resolvers.() -> Unit
-public typealias ContextPlugin = PipelineContext<Unit, ApplicationCall>.(GraphQLContext.Builder) -> Unit
 
 public class GraphQLConfig internal constructor() {
     internal var resolvers: ResolverRouting? = null
-    internal var contextBuilder: ContextPlugin? = null
+    internal var contextPlugins: Iterable<ContextPlugin>? = null
     internal var sdl: String = ""
 
     public fun sdl(schema: String) {
@@ -21,7 +17,11 @@ public class GraphQLConfig internal constructor() {
         resolvers = block
     }
 
-    public fun buildContext(build: ContextPlugin) {
-        contextBuilder = build
+    public fun contextPlugins(vararg plugins: ContextPlugin) {
+        contextPlugins = plugins.toList()
+    }
+
+    public fun contextPlugins(plugins: Iterable<ContextPlugin>) {
+        contextPlugins = plugins
     }
 }

@@ -30,14 +30,16 @@ public fun Route.graphQL(
             return@post
         }
 
-        // Complete the request input with the base context and run
-        // context plugins passed to the configuration
+        // Complete the request input with the base context
         val input = inputBuilder.graphQLContext { context ->
             context.put(ContextKeys.coroutineScope, this)
             context.put(ContextKeys.applicationCall, call)
-
-            config.contextBuilder?.invoke(this, context)
         }.build()
+
+        // Apply context plugins
+        config.contextPlugins?.forEach {
+            with(it) { updateContext(input.graphQLContext) }
+        }
 
         // Execute the request and encode the response
         val result: ExecutionResult = graph.executeAsync(input).await()
