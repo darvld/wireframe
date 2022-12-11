@@ -5,12 +5,16 @@ import com.squareup.kotlinpoet.FileSpec
 import com.squareup.kotlinpoet.FunSpec
 import com.squareup.kotlinpoet.TypeSpec
 import graphql.schema.GraphQLNamedType
+import graphql.schema.GraphQLOutputType
 import io.github.darvld.wireframe.WireframeCompiler.Output
 import io.github.darvld.wireframe.extensions.generateNameFor
+import io.github.darvld.wireframe.extensions.isRouteType
+import io.github.darvld.wireframe.extensions.subpackage
 
 /**Provides information about the environment in which the code will be generated.*/
 public class ProcessingEnvironment internal constructor(
     public val basePackage: String,
+    public val typeMappings: Map<String, String>,
 ) {
     @JvmInline
     private value class OutputKey(@Suppress("unused") val qualifiedName: String) {
@@ -27,6 +31,22 @@ public class ProcessingEnvironment internal constructor(
     }
 
     public fun resolve(type: GraphQLNamedType): ClassName = nameResolutionCache.getOrPut(type) {
+        // Use mapped types when available
+        typeMappings[type.name]?.let { mappedName ->
+            if (type !is GraphQLOutputType)
+                error("Type mapping is only allowed for output types")
+
+            if (type.isRouteType())
+                error("Mapping built-in types (Query, Mutation, Subscription) is not allowed")
+
+            // Mapped names may begin with a subpackage relative to the project's base package
+            return ClassName(
+                packageName = basePackage.subpackage(mappedName.substringBeforeLast('.')),
+                mappedName.substringAfterLast('.'),
+            )
+        }
+
+        // Use generated type names when no mapped types are specified
         ClassName(packageNameCache.getOrDefault(type.name, basePackage), generateNameFor(type))
     }
 

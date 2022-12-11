@@ -10,7 +10,11 @@ import io.github.darvld.wireframe.extensions.isRouteType
 
 public class BasePlugin : WireframeCompilerPlugin {
     override fun processType(type: GraphQLNamedType, environment: ProcessingEnvironment) {
+        // Query, Mutation, and Subscription don't get a generated class
         if (type.isRouteType()) return
+
+        // Don't generate a DTO if there's a custom mapping for this type
+        if (environment.typeMappings.containsKey(type.name)) return
 
         if (type is GraphQLEnumType) {
             processEnumType(type, environment)

@@ -16,6 +16,20 @@ import java.nio.file.Path
 /**Analyzes `.graphqls` schema definitions using graphql-java and outputs type-safe Kotlin code for the types and
  *  operations in the schema.*/
 public class WireframeCompiler {
+    /*Contains options to customize the generation process.*/
+    public data class Options(
+        val basePackage: String,
+        val plugins: Iterable<WireframeCompilerPlugin> = emptyList(),
+        val typeMappings: Map<String, String> = emptyMap(),
+    )
+
+    /**Represents a piece of input data to be processed by the compiler.*/
+    public data class Source(
+        val sdl: String,
+        val packageName: String? = null,
+        val fileName: String? = null,
+    )
+
     /**Encapsulates an output element from the code generator. Use it to write the generated code to an [Appendable],
      * or as a file in a target directory.*/
     @JvmInline
@@ -35,21 +49,13 @@ public class WireframeCompiler {
         }
     }
 
-    /**Represents a piece of input data to be processed by the compiler.*/
-    public data class Source(
-        val sdl: String,
-        val packageName: String? = null,
-        val fileName: String? = null,
-    )
-
     public fun process(
-        basePackage: String,
         sources: Iterable<Source>,
-        plugins: Iterable<WireframeCompilerPlugin> = emptyList(),
+        options: Options,
     ): Sequence<Output> {
         val parser = SchemaParser()
-        val environment = ProcessingEnvironment(basePackage)
-        val allPlugins = listOf(BasePlugin(), ResolversPlugin()) + plugins
+        val environment = ProcessingEnvironment(options.basePackage, options.typeMappings)
+        val allPlugins = listOf(BasePlugin(), ResolversPlugin()) + options.plugins
 
         // Parse all sources and merge declarations into a single registry
         val registry: TypeDefinitionRegistry = sources.fold(TypeDefinitionRegistry()) { current, next ->
