@@ -11,12 +11,12 @@ import io.ktor.server.routing.*
 internal fun buildGraph(route: Route, path: String, config: GraphQLConfig): GraphQL {
     if (config.resolvers == null) route.application.environment.log.warn(
         "No resolvers were defined for the graph at $path. All fields will return null." +
-        " Make sure you are calling the `resolvers` function in the endpoint configuration."
+            " Make sure you are calling the `resolvers` function in the endpoint configuration."
     )
 
     if (config.sdl.isBlank()) error(
         "A non-blank SDL was used for endpoint $path. Check your endpoint configuration" +
-        "and ensure you are calling `sdl` to define the GraphQL schema."
+            "and ensure you are calling `sdl` to define the GraphQL schema."
     )
 
     val registry: TypeDefinitionRegistry = SchemaParser().parse(config.sdl)
@@ -25,5 +25,7 @@ internal fun buildGraph(route: Route, path: String, config: GraphQLConfig): Grap
         .build()
 
     val schema: GraphQLSchema = SchemaGenerator().makeExecutableSchema(registry, wiring)
-    return GraphQL.newGraphQL(schema).build()
+    return GraphQL.newGraphQL(schema)
+        .defaultDataFetcherExceptionHandler(DefaultExceptionHandler)
+        .build()
 }
