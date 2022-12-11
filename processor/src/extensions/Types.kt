@@ -17,6 +17,8 @@ public inline fun TypeName.nonNullable(): TypeName {
     return if (isNullable) copy(nullable = false) else this
 }
 
-public fun String.subpackage(subpackage: String): String {
-    return if (isEmpty()) subpackage else "$this.$subpackage"
+public fun String.subpackage(subpackage: String): String = when {
+    isEmpty() -> subpackage
+    subpackage.isEmpty() -> this
+    else -> "$this.$subpackage"
 }

@@ -5,6 +5,7 @@ import com.facebook.ktfmt.format.FormattingOptions
 import org.gradle.api.DefaultTask
 import org.gradle.api.file.ConfigurableFileCollection
 import org.gradle.api.file.DirectoryProperty
+import org.gradle.api.provider.MapProperty
 import org.gradle.api.provider.Property
 import org.gradle.api.tasks.*
 import org.gradle.work.Incremental
@@ -32,6 +33,9 @@ abstract class GenerateWiringTask : DefaultTask() {
     @get:Input
     abstract val useFilenamePackage: Property<Boolean>
 
+    @get:Input
+    abstract val mappedTypes: MapProperty<String, String>
+
     @get:InputFiles
     abstract val pluginJars: ConfigurableFileCollection
 
@@ -53,6 +57,7 @@ abstract class GenerateWiringTask : DefaultTask() {
         val basePackage = packageName.get()
         val appendFilename = useFilenamePackage.get()
         val rootPath = sourcesRoot.get().asFile.toPath()
+        val typeMappings = mappedTypes.get()
 
         val sources = sourcesRoot.asFileTree.filter { extensionRegex.matches(it.extension) }.map {
             val sourcePackageName = rootPath.relativize(it.toPath()).pathString
@@ -77,9 +82,12 @@ abstract class GenerateWiringTask : DefaultTask() {
         val outputPath = outputDir.asFile.get().toPath()
 
         generator.process(
-            basePackage = basePackage,
             sources,
-            plugins
+            options = WireframeCompiler.Options(
+                basePackage,
+                plugins,
+                typeMappings,
+            )
         ).forEach {
             it.writeTo(outputPath)
         }

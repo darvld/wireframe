@@ -49,7 +49,8 @@ class WireframePlugin : Plugin<Project> {
 
                 task.packageName.set(wiring.packageName.orElse(project.group.toString()))
                 task.useFilenamePackage.set(wiring.useFilenamePackage.orElse(true))
-                
+                task.mappedTypes.set(wiring.mappedTypes.orElse(emptyMap()))
+
                 task.pluginJars.setFrom(configuration)
 
                 val sources = wiring.sourcesRoot.orNull
