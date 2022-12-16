@@ -16,7 +16,7 @@ java {
 }
 
 publishing {
-    publications.create<MavenPublication>("runtime") { from(components["java"]) }
+    publications.create<MavenPublication>("runtime-core") { from(components["java"]) }
 }
 
 sourceSets {
@@ -28,7 +28,6 @@ dependencies {
     api(libs.graphql)
     api(libs.kotlinx.coroutines)
 
-    println("")
     testImplementation(kotlin("test"))
 }
 

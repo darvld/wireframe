@@ -86,15 +86,15 @@ public class ResolversPlugin : WireframeCompilerPlugin {
 
                 // Resolver DSL body
                 addCode {
-                    // Use `dataFetcher`, pass in the type and field names
+                    // Use `resolver`, pass in the field path
                     // Unpack arguments using extensions
                     // Invoke lambda parameter
-                    beginControlFlow("%L.dataFetcher(%S, %S)", WRAPPED_RESOLVERS_PROP_NAME, type.name, field.name)
+                    beginControlFlow("%L.resolver(%S)", WRAPPED_RESOLVERS_PROP_NAME, "${type.name}.${field.name}")
 
                     // Unwrap arguments
                     field.arguments.forEach { argument ->
                         val unwrapper = environment.buildFieldExtractor(
-                            unwrap = { CodeBlock.of("it.getArgument<%T>(%S)", it, argument.name) },
+                            unwrap = { CodeBlock.of("getArgument<%T>(%S)", it, argument.name) },
                             argument.type,
                         )
 
@@ -107,7 +107,7 @@ public class ResolversPlugin : WireframeCompilerPlugin {
                         "%L(%L%L)",
                         RESOLVER_LAMBDA_PARAM_NAME,
                         // Fields in custom types receive the resolved value for the parent as first parameter
-                        "it.getSource(),".takeUnless { type.isRouteType() }.orEmpty(),
+                        "getSource(),".takeUnless { type.isRouteType() }.orEmpty(),
                         // Pass the unwrapped arguments to the resolver
                         field.arguments.joinToString { it.name }
                     )

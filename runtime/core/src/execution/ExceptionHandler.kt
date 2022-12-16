@@ -1,4 +1,4 @@
-package io.github.darvld.wireframe.ktor
+package io.github.darvld.wireframe.execution
 
 import graphql.ExceptionWhileDataFetching
 import graphql.GraphQLException
@@ -7,8 +7,10 @@ import graphql.execution.DataFetcherExceptionHandlerResult
 import graphql.execution.SimpleDataFetcherExceptionHandler
 import java.util.concurrent.CompletableFuture
 
-internal object DefaultExceptionHandler : SimpleDataFetcherExceptionHandler() {
-    override fun handleException(handlerParameters: DataFetcherExceptionHandlerParameters): CompletableFuture<DataFetcherExceptionHandlerResult> {
+internal object GraphQLExceptionHandler : SimpleDataFetcherExceptionHandler() {
+    override fun handleException(
+        handlerParameters: DataFetcherExceptionHandlerParameters
+    ): CompletableFuture<DataFetcherExceptionHandlerResult> {
         val exception = unwrap(handlerParameters.exception)
         val error = ExceptionWhileDataFetching(
             handlerParameters.path,
