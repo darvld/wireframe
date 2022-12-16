@@ -12,6 +12,20 @@ import io.github.darvld.wireframe.execution.scope
 import io.github.darvld.wireframe.routing.Resolvers
 import kotlinx.coroutines.coroutineScope
 
+/**
+ * A GraphQL interpreter than can be used to process [requests][ExecutionInput].
+ *
+ * It uses graphql-java's [GraphQL] engine under the hood, providing support for
+ * coroutine-based resolvers, rather than java's [CompletableFuture][java.util.concurrent.CompletableFuture]
+ * API.
+ *
+ * Using a [WireframeServer] also allows you to use [context plugins][ContextPlugin] to create a
+ * custom context for every request (e.g. for authorization, request-scoped dependencies, etc.) and
+ * pass it down to your resolvers.
+ *
+ * This class does not handle serialization, if you need to decode a JSON request as provided
+ * by a web server, use the [Transport][io.github.darvld.wireframe.transport.Transport] API.
+ */
 public class WireframeServer<T> internal constructor(
     private val graph: GraphQL,
     private val contextPlugins: List<ContextPlugin<T>>,
@@ -32,6 +46,10 @@ public class WireframeServer<T> internal constructor(
     }
 }
 
+/**
+ * Creates and configures a [WireframeServer] given a [schema] definition, [resolvers], and
+ * an (optional) [ContextPlugin] list.
+ */
 public fun <T> WireframeServer(
     schema: String,
     resolvers: Resolvers,

@@ -1,7 +1,7 @@
 package io.github.darvld.wireframe.ktor
 
 import io.github.darvld.wireframe.routing.Resolvers
-import io.github.darvld.wireframe.transport.JsonSerializer
+import io.github.darvld.wireframe.transport.Transport
 
 public typealias ResolverRouting = Resolvers.() -> Unit
 
@@ -9,7 +9,7 @@ public class GraphQLConfig internal constructor() {
     private var _resolvers: ResolverRouting? = null
     private var _contextPlugins: List<KtorContextPlugin>? = null
     private var _sdl: String = ""
-    private var _transport: JsonSerializer? = null
+    private var _transport: Transport? = null
 
     internal val resolvers: Resolvers
         get() = _resolvers?.let(Resolvers()::apply)
@@ -24,7 +24,7 @@ public class GraphQLConfig internal constructor() {
     internal val contextPlugins: List<KtorContextPlugin>
         get() = _contextPlugins ?: emptyList()
 
-    internal val transport: JsonSerializer
+    internal val transport: Transport
         get() = _transport ?: throw IllegalStateException("Transport must be specified.")
 
     public fun sdl(schema: String) {
@@ -39,7 +39,7 @@ public class GraphQLConfig internal constructor() {
         _contextPlugins = plugins.toList()
     }
 
-    public fun useSerializer(transport: JsonSerializer) {
+    public fun useSerializer(transport: Transport) {
         _transport = transport
     }
 

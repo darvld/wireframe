@@ -1,12 +1,14 @@
 package io.github.darvld.wireframe.routing
 
 import graphql.schema.idl.WiringFactory
+import io.github.darvld.wireframe.ResolversDsl
 import io.github.darvld.wireframe.execution.RuntimeWiringFactory
 import io.github.darvld.wireframe.execution.SuspendingDataFetcher
 
 public fun Resolvers(): Resolvers = Resolvers(mutableMapOf())
 
 @JvmInline
+@ResolversDsl
 public value class Resolvers internal constructor(
     private val map: MutableMap<String, Wiring>
 ) {
