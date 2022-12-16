@@ -4,7 +4,10 @@ import org.gradle.api.initialization.resolve.RepositoriesMode.FAIL_ON_PROJECT_RE
 
 // Basic configuration
 rootProject.name = "wireframe"
-include(":processor", ":runtime", ":plugin-gradle", ":plugin-ktor", ":sample")
+include(":processor", ":plugin")
+include(":runtime", ":runtime:core", ":runtime:ktor")
+include(":transport:kotlinx")
+include(":sample")
 
 enableFeaturePreview("TYPESAFE_PROJECT_ACCESSORS")
 

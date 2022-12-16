@@ -16,7 +16,7 @@ java {
 }
 
 publishing {
-    publications.create<MavenPublication>("runtime") { from(components["java"]) }
+    publications.create<MavenPublication>("runtime-ktor") { from(components["java"]) }
 }
 
 sourceSets {
@@ -25,11 +25,8 @@ sourceSets {
 }
 
 dependencies {
-    api(projects.runtime)
-
+    api(projects.runtime.core)
     api(libs.ktor.server.core)
-    api(libs.ktor.server.serialization)
-    api(libs.ktor.server.contentNegotiation)
 
     testImplementation(kotlin("test"))
 }

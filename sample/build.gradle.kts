@@ -4,7 +4,7 @@ import java.util.*
 
 plugins {
     kotlin("jvm")
-    id("io.github.darvld.wireframe") version "0.5.2"
+    id("io.github.darvld.wireframe") version "0.6.0"
 
     application
 }
@@ -26,7 +26,8 @@ sourceSets {
 }
 
 dependencies {
-    implementation(projects.pluginKtor)
+    implementation(projects.runtime.ktor)
+    implementation(projects.transport.kotlinx)
 
     implementation(libs.ktor.server.cio)
     implementation(libs.ktor.server.cors)

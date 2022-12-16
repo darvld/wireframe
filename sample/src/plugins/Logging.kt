@@ -2,6 +2,7 @@ package io.github.darvld.wireframe.sample.plugins
 
 import io.github.darvld.wireframe.ktor.call
 import io.github.darvld.wireframe.routing.ResolverScope
+import io.github.darvld.wireframe.routing.context
 import io.ktor.server.application.*
 import io.ktor.util.pipeline.*
 import org.slf4j.Logger

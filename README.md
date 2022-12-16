@@ -19,7 +19,7 @@ The following table shows the current state of features for the Ktor runtime:
 | Subscriptions support                 | Not implemented 🚧 |
 | Batch requests support                | Not implemented 🚧 |
 | Support GraphQL interfaces and unions | Not implemented 🚧 |
-| Custom type mappings                  | Not implemented 🚧 |
+| Custom type mappings                  | Implemented ✅      |
 
 ## More information
 

@@ -16,7 +16,7 @@ java {
 }
 
 publishing {
-    publications.create<MavenPublication>("processor") { from(components["java"]) }
+    publications.create<MavenPublication>("transport-kotlinx") { from(components["java"]) }
 }
 
 sourceSets {
@@ -25,10 +25,8 @@ sourceSets {
 }
 
 dependencies {
-    implementation(projects.runtime.core)
-
-    implementation(libs.graphql)
-    implementation(libs.kotlinpoet)
+    api(projects.runtime.core)
+    api(libs.kotlinx.serialization)
 
     testImplementation(kotlin("test"))
 }
