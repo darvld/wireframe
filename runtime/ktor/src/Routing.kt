@@ -1,7 +1,6 @@
 package io.github.darvld.wireframe.ktor
 
 import graphql.ExecutionResult
-import io.github.darvld.wireframe.WireframeInternal
 import io.github.darvld.wireframe.WireframeServer
 import io.ktor.http.*
 import io.ktor.server.application.*
@@ -9,7 +8,6 @@ import io.ktor.server.request.*
 import io.ktor.server.response.*
 import io.ktor.server.routing.*
 
-@OptIn(WireframeInternal::class)
 public fun Route.graphQL(
     path: String = "/graphql",
     configure: GraphQLConfig.() -> Unit,
@@ -27,6 +25,10 @@ public fun Route.graphQL(
     post(path) {
         // Decode the GraphQL request in JSON according to the spec
         val input = transport.decodeRequest(call.receiveText())
+        if (input == null) {
+            call.respond(HttpStatusCode.BadRequest)
+            return@post
+        }
 
         // Add ktor-specific context
         input.graphQLContext.call = this@post.call

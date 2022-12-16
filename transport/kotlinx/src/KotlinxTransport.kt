@@ -5,8 +5,9 @@ import graphql.ExecutionResult
 import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.*
 
-public object KotlinSerializer : JsonSerializer {
-    override fun decodeRequest(encoded: String): ExecutionInput {
+/**A JSON [Transport] using the official Kotlin serialization library.*/
+public object KotlinxTransport : Transport {
+    override fun decodeRequest(encoded: String): ExecutionInput? = runCatching {
         val json = Json.parseToJsonElement(encoded).jsonObject
 
         val query = json["query"]?.jsonPrimitive?.content
@@ -18,8 +19,8 @@ public object KotlinSerializer : JsonSerializer {
         operationName?.let(builder::operationName)
         variables?.let(builder::variables)
 
-        return builder.build()
-    }
+        builder.build()
+    }.getOrNull()
 
 
     override fun encodeResponse(result: ExecutionResult): String {

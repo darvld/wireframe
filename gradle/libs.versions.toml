@@ -19,3 +19,4 @@ ktor-server-contentNegotiation = { module = "io.ktor:ktor-server-content-negotia
 ktor-server-cors = { module = "io.ktor:ktor-server-cors", version.ref = "ktor" }
 
 logging-logback = { module = "ch.qos.logback:logback-classic", version = "1.2.11" }
+kotest-assertions = { module  = "io.kotest:kotest-assertions-core", version = "5.5.4" }

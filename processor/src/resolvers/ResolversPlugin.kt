@@ -44,6 +44,7 @@ public class ResolversPlugin : WireframeCompilerPlugin {
         val scopeTypeName = environment.scopeClassName(type)
         val scopeClassSpec = buildClass(scopeTypeName) {
             markAsGenerated()
+            addAnnotation(DSL_MARKER)
 
             // Use an inline class to reduce overhead
             addAnnotation(JVM_INLINE)
@@ -94,7 +95,7 @@ public class ResolversPlugin : WireframeCompilerPlugin {
                     // Unwrap arguments
                     field.arguments.forEach { argument ->
                         val unwrapper = environment.buildFieldExtractor(
-                            unwrap = { CodeBlock.of("getArgument<%T>(%S)", it, argument.name) },
+                            unwrap = { CodeBlock.of("env.getArgument<%T>(%S)", it, argument.name) },
                             argument.type,
                         )
 
@@ -107,7 +108,7 @@ public class ResolversPlugin : WireframeCompilerPlugin {
                         "%L(%L%L)",
                         RESOLVER_LAMBDA_PARAM_NAME,
                         // Fields in custom types receive the resolved value for the parent as first parameter
-                        "getSource(),".takeUnless { type.isRouteType() }.orEmpty(),
+                        "env.getSource(),".takeUnless { type.isRouteType() }.orEmpty(),
                         // Pass the unwrapped arguments to the resolver
                         field.arguments.joinToString { it.name }
                     )
@@ -129,6 +130,7 @@ public class ResolversPlugin : WireframeCompilerPlugin {
     private fun generateRouteExtension(type: GraphQLObjectType, environment: ProcessingEnvironment): FunSpec {
         return buildFunction(type.name.replaceFirstChar(Char::lowercaseChar)) {
             markAsGenerated()
+            addAnnotation(DSL_MARKER)
 
             receiver(RESOLVERS)
             addModifiers(INLINE)

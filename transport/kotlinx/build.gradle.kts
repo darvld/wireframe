@@ -29,6 +29,7 @@ dependencies {
     api(libs.kotlinx.serialization)
 
     testImplementation(kotlin("test"))
+    testImplementation(libs.kotest.assertions)
 }
 
 tasks.test {

@@ -4,7 +4,6 @@ import io.github.darvld.wireframe.resolvers.artist
 import io.github.darvld.wireframe.resolvers.mutation
 import io.github.darvld.wireframe.resolvers.query
 import io.github.darvld.wireframe.routing.Resolvers
-import io.github.darvld.wireframe.routing.context
 import io.github.darvld.wireframe.sample.plugins.log
 import io.github.darvld.wireframe.schema.ArtistDto
 import java.util.*

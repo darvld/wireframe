@@ -6,11 +6,6 @@ import graphql.schema.*
 import io.github.darvld.wireframe.ProcessingEnvironment
 import io.github.darvld.wireframe.extensions.*
 
-// TODO
-private fun typeExtractor(type: TypeName, argumentName: String): CodeBlock {
-    return CodeBlock.of("info.getArgument<%T>(%S)", type, argumentName)
-}
-
 /**Builds a [CodeBlock] to extract a field from a target container (e.g. a map or a GraphQL request), and map them
  * from graphql-java's map representation to the corresponding input DTO or primitive type.*/
 internal fun ProcessingEnvironment.buildFieldExtractor(
