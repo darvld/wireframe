@@ -8,9 +8,9 @@ import graphql.schema.idl.SchemaGenerator
 import graphql.schema.idl.SchemaParser
 import io.github.darvld.wireframe.execution.ContextPlugin
 import io.github.darvld.wireframe.execution.GraphQLExceptionHandler
-import io.github.darvld.wireframe.execution.scope
+import io.github.darvld.wireframe.execution.useScope
 import io.github.darvld.wireframe.routing.Resolvers
-import kotlinx.coroutines.coroutineScope
+import kotlinx.coroutines.supervisorScope
 
 /**
  * A GraphQL interpreter than can be used to process [requests][ExecutionInput].
@@ -31,9 +31,9 @@ public class WireframeServer<T> internal constructor(
     private val contextPlugins: List<ContextPlugin<T>>,
 ) {
     public suspend fun execute(request: T, input: ExecutionInput): ExecutionResult {
-        return coroutineScope {
+        return supervisorScope {
             // Attach scope to the context
-            input.graphQLContext.scope = this
+            input.graphQLContext.useScope(this)
 
             // Apply context plugins
             contextPlugins.forEach {

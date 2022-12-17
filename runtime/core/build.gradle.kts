@@ -16,7 +16,10 @@ java {
 }
 
 publishing {
-    publications.create<MavenPublication>("runtime-core") { from(components["java"]) }
+    publications.create<MavenPublication>("runtime-core") {
+        from(components["java"])
+        artifactId = "runtime-core"
+    }
 }
 
 sourceSets {

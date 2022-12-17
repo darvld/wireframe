@@ -16,7 +16,10 @@ java {
 }
 
 publishing {
-    publications.create<MavenPublication>("processor") { from(components["java"]) }
+    publications.create<MavenPublication>("maven") {
+        from(components["java"])
+        artifactId = "processor"
+    }
 }
 
 sourceSets {

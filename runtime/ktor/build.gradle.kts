@@ -16,7 +16,10 @@ java {
 }
 
 publishing {
-    publications.create<MavenPublication>("runtime-ktor") { from(components["java"]) }
+    publications.create<MavenPublication>("maven") {
+        from(components["java"])
+        artifactId = "runtime-ktor"
+    }
 }
 
 sourceSets {
@@ -35,6 +38,6 @@ tasks.test {
     useJUnitPlatform()
 }
 
-tasks.withType<KotlinCompile> {
+tasks.withType < KotlinCompile > {
     kotlinOptions.jvmTarget = "11"
 }
