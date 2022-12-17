@@ -12,7 +12,7 @@ fun Route.api() = graphQL {
     sdl(loadSchema())
 
     // Use kotlinx-serialization for encoding/decoding JSON data
-    useSerializer(KotlinxTransport)
+    transport(KotlinxTransport)
 
     // We can create our own context for the call based on the original HTTP request
     contextPlugins(ContextPlugin { _, context ->

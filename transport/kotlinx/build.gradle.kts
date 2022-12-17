@@ -16,7 +16,10 @@ java {
 }
 
 publishing {
-    publications.create<MavenPublication>("transport-kotlinx") { from(components["java"]) }
+    publications.create<MavenPublication>("maven") {
+        from(components["java"])
+        artifactId = "transport-kotlinx"
+    }
 }
 
 sourceSets {

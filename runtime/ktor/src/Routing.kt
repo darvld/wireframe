@@ -8,6 +8,17 @@ import io.ktor.server.request.*
 import io.ktor.server.response.*
 import io.ktor.server.routing.*
 
+/**
+ * Builds a GraphQL endpoint at the given [path]. Use the [configure]
+ * block to define the schema and resolvers used for this endpoint.
+ *
+ * Multiple GraphQL routes could be installed on a single server
+ * without any major performance concerns.
+ *
+ * This route will accept POST calls and treat them as JSON-encoded
+ * GraphQL requests. A failed decoding attempt will result in a 400
+ * error code.
+ */
 public fun Route.graphQL(
     path: String = "/graphql",
     configure: GraphQLConfig.() -> Unit,
@@ -31,7 +42,7 @@ public fun Route.graphQL(
         }
 
         // Add ktor-specific context
-        input.graphQLContext.call = this@post.call
+        input.graphQLContext.useCall(call)
 
         // Execute the request
         val result: ExecutionResult = server.execute(this, input)

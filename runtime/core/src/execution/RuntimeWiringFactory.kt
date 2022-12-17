@@ -2,8 +2,10 @@ package io.github.darvld.wireframe.execution
 
 import graphql.schema.DataFetcher
 import graphql.schema.idl.*
+import io.github.darvld.wireframe.WireframeInternal
 import io.github.darvld.wireframe.routing.Wiring
 
+@OptIn(WireframeInternal::class)
 internal class RuntimeWiringFactory(
     private val mapping: MutableMap<String, Wiring>
 ) : WiringFactory {

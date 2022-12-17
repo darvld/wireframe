@@ -5,11 +5,8 @@ import com.squareup.kotlinpoet.KModifier.*
 import graphql.schema.GraphQLInputObjectType
 import graphql.schema.GraphQLNamedType
 import graphql.schema.GraphQLObjectType
-import io.github.darvld.wireframe.ProcessingEnvironment
-import io.github.darvld.wireframe.ResolversDsl
-import io.github.darvld.wireframe.WireframeCompilerPlugin
+import io.github.darvld.wireframe.*
 import io.github.darvld.wireframe.extensions.*
-import io.github.darvld.wireframe.output
 import io.github.darvld.wireframe.routing.ResolverScope
 import io.github.darvld.wireframe.routing.Resolvers
 
@@ -63,6 +60,7 @@ public class ResolversPlugin : WireframeCompilerPlugin {
             for (field in type.fields) addFunction(buildFunction(field.name) {
                 markAsGenerated()
                 addAnnotation(DSL_MARKER)
+                addAnnotation(optInToInternalApi())
 
                 // Create resolver lambda signature
                 val lambdaType = LambdaTypeName.get(
@@ -141,12 +139,22 @@ public class ResolversPlugin : WireframeCompilerPlugin {
         }
     }
 
+    private fun optInToInternalApi(): AnnotationSpec {
+        return AnnotationSpec
+            .builder(OPT_IN)
+            .addMember("%T::class", INTERNAL_API_MARKER)
+            .build()
+    }
+
     private companion object {
         val JVM_INLINE = JvmInline::class.asClassName()
         val DSL_MARKER = ResolversDsl::class.asClassName()
 
         val RESOLVERS = Resolvers::class.asClassName()
         val RESOLVER_SCOPE = ResolverScope::class.asClassName()
+
+        val OPT_IN = ClassName("kotlin", "OptIn")
+        val INTERNAL_API_MARKER = ClassName("io.github.darvld.wireframe", "WireframeInternal")
 
         const val WRAPPED_RESOLVERS_PROP_NAME = "resolvers"
         const val RESOLVER_LAMBDA_PARAM_NAME = "resolver"

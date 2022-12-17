@@ -10,3 +10,4 @@ Wireframe.
   how to setup the application.
 - `resources` contains configuration files for the Ktor server, Logback (SLF4J) settings, and the index page used to
   display the GraphiQL UI.
+- `graphql` contains the GraphQL schema used by the server.
