@@ -10,6 +10,7 @@ import io.github.darvld.wireframe.extensions.nullable
 
 private const val DECODER_MAP_PARAM = "map"
 
+@OptIn(DelicateKotlinPoetApi::class)
 internal fun buildDecoder(
     outputType: ClassName,
     definition: GraphQLInputObjectType,
@@ -17,7 +18,10 @@ internal fun buildDecoder(
 ): FunSpec {
     return buildFunction(outputType.simpleName) {
         markAsGenerated()
-        addKdoc("Constructs a new ${outputType.simpleName} from an unsafe map. This is useful for decoding the query parameters provided by graphql-java.")
+        addKdoc("Constructs a new ${outputType.simpleName} from an unsafe map.")
+
+        // Suppress compiler warnings about unchecked casts from Any to Map<K, V>
+        addAnnotation(AnnotationSpec.get(Suppress("unchecked_cast")))
 
         returns(outputType)
         addParameter(DECODER_MAP_PARAM, MAP.parameterizedBy(STRING, ANY.nullable()))
