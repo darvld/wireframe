@@ -3,6 +3,7 @@
 ## New Features
 
 - Support for custom type mappings.
+- Support for custom scalars.
 
 ## Improvements
 

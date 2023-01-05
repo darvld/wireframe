@@ -6,6 +6,7 @@ import com.squareup.kotlinpoet.FunSpec
 import com.squareup.kotlinpoet.TypeSpec
 import graphql.schema.GraphQLNamedType
 import graphql.schema.GraphQLOutputType
+import graphql.schema.GraphQLScalarType
 import io.github.darvld.wireframe.WireframeCompiler.Output
 import io.github.darvld.wireframe.extensions.generateNameFor
 import io.github.darvld.wireframe.extensions.isRouteType
@@ -30,9 +31,24 @@ public class ProcessingEnvironment internal constructor(
         packageNameCache[typeName] = packageName
     }
 
+    public fun resolvePackage(type: GraphQLNamedType): String = packageNameCache.getOrPut(type.name) {
+        // Use mapped types if available
+        typeMappings[type.name]?.takeUnless { type is GraphQLScalarType }?.let { mappedName ->
+            if (type !is GraphQLOutputType)
+                error("Type mapping is only allowed for output types")
+
+            if (type.isRouteType())
+                error("Mapping built-in types (Query, Mutation, Subscription) is not allowed")
+
+            return basePackage.subpackage(mappedName.substringBefore("."))
+        }
+
+        return basePackage
+    }
+
     public fun resolve(type: GraphQLNamedType): ClassName = nameResolutionCache.getOrPut(type) {
-        // Use mapped types when available
-        typeMappings[type.name]?.let { mappedName ->
+        // Use mapped types when available, but avoid it for custom scalars (use generated alias instead)
+        typeMappings[type.name]?.takeUnless { type is GraphQLScalarType }?.let { mappedName ->
             if (type !is GraphQLOutputType)
                 error("Type mapping is only allowed for output types")
 

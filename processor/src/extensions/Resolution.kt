@@ -14,6 +14,7 @@ public fun ProcessingEnvironment.idTypeAlias(): ClassName {
 
 public fun generateNameFor(type: GraphQLNamedType): String = when (type) {
     is GraphQLEnumType, is GraphQLInterfaceType -> type.name
+    is GraphQLScalarType -> type.name
     else -> "${type.name}Dto"
 }
 
@@ -37,5 +38,5 @@ private fun scalarTypeNameFor(type: GraphQLScalarType, environment: ProcessingEn
     Scalars.GraphQLID -> environment.idTypeAlias()
     Scalars.GraphQLInt -> INT
     Scalars.GraphQLString -> STRING
-    else -> throw NotImplementedError("Custom scalar types are not supported yet.")
+    else -> environment.resolve(type)
 }.nullable()

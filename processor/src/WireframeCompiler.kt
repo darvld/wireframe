@@ -11,6 +11,7 @@ import io.github.darvld.wireframe.base.BasePlugin
 import io.github.darvld.wireframe.extensions.isInternalType
 import io.github.darvld.wireframe.extensions.subpackage
 import io.github.darvld.wireframe.resolvers.ResolversPlugin
+import io.github.darvld.wireframe.scalars.ScalarsPlugin
 import java.nio.file.Path
 
 /**Analyzes `.graphqls` schema definitions using graphql-java and outputs type-safe Kotlin code for the types and
@@ -55,7 +56,7 @@ public class WireframeCompiler {
     ): Sequence<Output> {
         val parser = SchemaParser()
         val environment = ProcessingEnvironment(options.basePackage, options.typeMappings)
-        val allPlugins = listOf(BasePlugin(), ResolversPlugin()) + options.plugins
+        val allPlugins = listOf(BasePlugin, ResolversPlugin, ScalarsPlugin) + options.plugins
 
         // Parse all sources and merge declarations into a single registry
         val registry: TypeDefinitionRegistry = sources.fold(TypeDefinitionRegistry()) { current, next ->
@@ -86,7 +87,12 @@ public class WireframeCompiler {
         val registry = parser.parse(source.sdl)
 
         source.packageName?.let { sourcePackage ->
-            for (type: TypeDefinition<*> in registry.types().values) registerPackageFor(
+            val allDefinitions = buildList {
+                addAll(registry.scalars().values)
+                addAll(registry.types().values)
+            }
+
+            for (type: TypeDefinition<*> in allDefinitions) registerPackageFor(
                 typeName = type.name,
                 packageName = basePackage.subpackage(sourcePackage)
             )
