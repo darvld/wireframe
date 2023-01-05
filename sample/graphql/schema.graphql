@@ -1,5 +1,6 @@
 type Query {
     artist(id: ID!): Artist
+    hello: PlainString
 }
 
 type Mutation {
@@ -16,3 +17,5 @@ input ArtistInput {
     name: String!
     bio: String
 }
+
+scalar PlainString

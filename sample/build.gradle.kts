@@ -9,6 +9,10 @@ plugins {
     application
 }
 
+wiring {
+    mappedTypes.set(mapOf("PlainString" to "kotlin.String"))
+}
+
 java {
     sourceCompatibility = JavaVersion.VERSION_11
     targetCompatibility = JavaVersion.VERSION_11

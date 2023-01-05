@@ -1,5 +1,6 @@
 package io.github.darvld.wireframe.routing
 
+import graphql.schema.GraphQLScalarType
 import graphql.schema.idl.WiringFactory
 import io.github.darvld.wireframe.ResolversDsl
 import io.github.darvld.wireframe.WireframeInternal
@@ -19,16 +20,14 @@ import io.github.darvld.wireframe.execution.SuspendingDataFetcher
 @JvmInline
 @ResolversDsl
 @OptIn(WireframeInternal::class)
-public value class Resolvers internal constructor(
-    private val map: MutableMap<String, Wiring>
-) {
+public value class Resolvers internal constructor(private val map: WiringMap) {
     /**
      * Constructs an empty resolvers map. Use this if you're building
      * a custom integration with a server framework, to serve as
      * starting point for your routing definitions.
      * */
     @WireframeInternal
-    public constructor() : this(mutableMapOf())
+    public constructor() : this(wiringMap())
 
     internal val wiringFactory: WiringFactory
         get() = RuntimeWiringFactory(map)
@@ -37,5 +36,11 @@ public value class Resolvers internal constructor(
     @WireframeInternal
     public fun <T> resolver(path: String, resolve: suspend ResolverScope.() -> T) {
         map[path] = Wiring.DataFetcherWiring(SuspendingDataFetcher(resolve))
+    }
+
+    /**Register a custom scalar type with the given [name].*/
+    @WireframeInternal
+    public fun scalar(name: String, definition: GraphQLScalarType) {
+        map[name] = Wiring.ScalarWiring(definition)
     }
 }

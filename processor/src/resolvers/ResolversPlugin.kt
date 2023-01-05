@@ -10,7 +10,21 @@ import io.github.darvld.wireframe.extensions.*
 import io.github.darvld.wireframe.routing.ResolverScope
 import io.github.darvld.wireframe.routing.Resolvers
 
-public class ResolversPlugin : WireframeCompilerPlugin {
+public object ResolversPlugin : WireframeCompilerPlugin {
+    private val JVM_INLINE = JvmInline::class.asClassName()
+    private val DSL_MARKER = ResolversDsl::class.asClassName()
+
+    private val RESOLVERS = Resolvers::class.asClassName()
+    private val RESOLVER_SCOPE = ResolverScope::class.asClassName()
+
+    private val OPT_IN = ClassName("kotlin", "OptIn")
+    private val INTERNAL_API_MARKER = ClassName("io.github.darvld.wireframe", "WireframeInternal")
+
+    private const val WRAPPED_RESOLVERS_PROP_NAME = "resolvers"
+    private const val RESOLVER_LAMBDA_PARAM_NAME = "resolver"
+    private const val PARENT_PARAM_NAME = "parent"
+    private const val ROUTING_PARAM_NAME = "resolvers"
+
     private val ProcessingEnvironment.resolversPackage
         get() = "$basePackage.resolvers"
 
@@ -19,7 +33,7 @@ public class ResolversPlugin : WireframeCompilerPlugin {
     }
 
     override fun processType(type: GraphQLNamedType, environment: ProcessingEnvironment) {
-        // TODO: Also process interfaces and unions, adding a special `resolveType` method, and scalars
+        // TODO: Also process interfaces and unions, adding a special `resolveType` method
         // ...
 
         // Generate decoders for input types
@@ -61,6 +75,7 @@ public class ResolversPlugin : WireframeCompilerPlugin {
                 markAsGenerated()
                 addAnnotation(DSL_MARKER)
                 addAnnotation(optInToInternalApi())
+                addKdoc(field.description.orEmpty())
 
                 // Create resolver lambda signature
                 val lambdaType = LambdaTypeName.get(
@@ -129,6 +144,7 @@ public class ResolversPlugin : WireframeCompilerPlugin {
         return buildFunction(type.name.replaceFirstChar(Char::lowercaseChar)) {
             markAsGenerated()
             addAnnotation(DSL_MARKER)
+            addKdoc(type.description.orEmpty())
 
             receiver(RESOLVERS)
             addModifiers(INLINE)
@@ -144,21 +160,5 @@ public class ResolversPlugin : WireframeCompilerPlugin {
             .builder(OPT_IN)
             .addMember("%T::class", INTERNAL_API_MARKER)
             .build()
-    }
-
-    private companion object {
-        val JVM_INLINE = JvmInline::class.asClassName()
-        val DSL_MARKER = ResolversDsl::class.asClassName()
-
-        val RESOLVERS = Resolvers::class.asClassName()
-        val RESOLVER_SCOPE = ResolverScope::class.asClassName()
-
-        val OPT_IN = ClassName("kotlin", "OptIn")
-        val INTERNAL_API_MARKER = ClassName("io.github.darvld.wireframe", "WireframeInternal")
-
-        const val WRAPPED_RESOLVERS_PROP_NAME = "resolvers"
-        const val RESOLVER_LAMBDA_PARAM_NAME = "resolver"
-        const val PARENT_PARAM_NAME = "parent"
-        const val ROUTING_PARAM_NAME = "resolvers"
     }
 }

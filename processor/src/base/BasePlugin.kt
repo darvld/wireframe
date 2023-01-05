@@ -8,7 +8,7 @@ import io.github.darvld.wireframe.WireframeCompilerPlugin
 import io.github.darvld.wireframe.extensions.idTypeAlias
 import io.github.darvld.wireframe.extensions.isRouteType
 
-public class BasePlugin : WireframeCompilerPlugin {
+public object BasePlugin : WireframeCompilerPlugin {
     override fun processType(type: GraphQLNamedType, environment: ProcessingEnvironment) {
         // Query, Mutation, and Subscription don't get a generated class
         if (type.isRouteType()) return
