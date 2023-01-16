@@ -1,6 +1,6 @@
 # Wireframe
 
-[![Maven Central](https://img.shields.io/maven-central/v/io.github.darvld.wireframe/runtime.svg?label=Maven%20Central)](https://search.maven.org/search?q=g:%22io.github.darvld.wireframe%22%20AND%20a:%22runtime%22)
+[![Maven Central](https://img.shields.io/maven-central/v/io.github.darvld.wireframe/runtime.svg?label=Maven%20Central)](https://search.maven.org/search?q=g:%22io.github.darvld.wireframe%22%20AND%20a:%22runtime-core%22)
 
 > Wireframe is currently in a proof-of-concept stage. It should not be used in production environments. Feel free to try
 > it out while the API gets polished and new features are added, but be aware that breaking changes are likely to occur.
