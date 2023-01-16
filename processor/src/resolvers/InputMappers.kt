@@ -14,6 +14,16 @@ internal fun ProcessingEnvironment.buildFieldExtractor(
 ): CodeBlock {
     val fieldTypeName = typeNameFor(fieldType)
 
+    // Enum types must be converted
+    if (fieldType.unwrapCompletely() is GraphQLEnumType)
+        return CodeBlock.of(
+            format = "(%L).let·{ %T.valueOf(it) }",
+            // Enums are unwrapped as String, then converted
+            // using valueOf()
+            unwrap(STRING),
+            fieldTypeName.nonNullable()
+        )
+
     // Simple types can be extracted using a type cast even if they are wrapped in lists
     if (fieldType.unwrapCompletely() !is GraphQLInputObjectType)
         return unwrap(fieldTypeName)

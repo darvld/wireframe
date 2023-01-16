@@ -16,3 +16,4 @@
 - Generated resolvers are now correctly marked as `suspending`.
 - The `ResolversDSL` marker is now correctly applied to avoid scope pollution.
 - Published artifacts now have the correct id.
+- Fix incorrect unwrapping of enums on input objects
